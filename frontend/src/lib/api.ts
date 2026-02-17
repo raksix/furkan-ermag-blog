@@ -1,9 +1,13 @@
 import { BlogPost, Project } from "./types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5119/api";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 async function fetchApi<T>(endpoint: string): Promise<T> {
-  const res = await fetch(`${API_BASE}${endpoint}`, {
+  const base = typeof window === "undefined"
+    ? `http://localhost:${process.env.PORT || 3000}/api`
+    : API_BASE;
+
+  const res = await fetch(`${base}${endpoint}`, {
     next: { revalidate: 60 },
   });
 
